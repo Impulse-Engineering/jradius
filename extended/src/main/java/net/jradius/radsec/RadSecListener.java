@@ -23,6 +23,7 @@ package net.jradius.radsec;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
+import java.nio.Buffer;
 
 import net.jradius.dictionary.Attr_SharedSecret;
 import net.jradius.exception.RadiusException;
@@ -70,10 +71,10 @@ public class RadSecListener extends TCPListener
         if (length <= 0)
         	return null;
         
-        buffer.clear();
-        buffer.limit(inputStream.read(buffer.array(), 0, length));
+        ((Buffer)buffer).clear();
+        ((Buffer)buffer).limit(inputStream.read(buffer.array(), 0, length));
         
-        if (buffer.limit() != length)
+        if (((Buffer)buffer).limit() != length)
         	return null;
         
         RadiusRequest req = (RadiusRequest) PacketFactory.parseUDP(code, identifier, length, buffer, false);

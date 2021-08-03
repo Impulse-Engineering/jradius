@@ -34,6 +34,11 @@ import javax.crypto.spec.IvParameterSpec;
 
 import net.jradius.log.RadiusLog;
 
+import org.bouncycastle.crypto.digests.MD4Digest;
+import org.bouncycastle.crypto.digests.MD5Digest;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import java.util.Base64;
+
 /**
  * MSCHAP implementation translated into Java from the original 
  * pseudocode can be found in RFC 2759 and 2433. 
@@ -88,18 +93,8 @@ public final class MSCHAP
         md.update(uniPassword, 0, uniPassword.length);
         System.arraycopy(md.digest(), 0, PasswordHash, 0, 16);
         return PasswordHash;
-    }
 
-    /* not used currently
-    private static byte[] HashNtPasswordHash(byte[] PasswordHash)
-    {
-        byte PasswordHashHash[] = new byte[16];
-        IMessageDigest md = HashFactory.getInstance("MD4");
-        md.update(PasswordHash, 0, 16);
-        System.arraycopy(md.digest(), 0, PasswordHashHash, 0, 16);
-        return PasswordHashHash;
     }
-    */
 
     private static void DesEncrypt(byte[] Clear, int clearOffset, byte[] Key, int keyOffset, byte[] Cypher, int cypherOffset)
     {

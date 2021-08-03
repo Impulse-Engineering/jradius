@@ -22,6 +22,7 @@ package net.jradius.freeradius;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.nio.Buffer;
 
 import net.jradius.log.RadiusLog;
 import net.jradius.packet.RadiusFormat;
@@ -151,19 +152,19 @@ public class FreeRadiusFormat extends RadiusFormat
             throw new IllegalArgumentException("Packet is null.");
         }
 
-        int initialPosition = buffer.position();
-        buffer.position(initialPosition + 12);
+        int initialPosition = ((Buffer)buffer).position();
+        ((Buffer)buffer).position(initialPosition + 12);
         packAttributeList(packet.getAttributes(), buffer, onWire);
 
-        int finalPosition = buffer.position();
+        int finalPosition = ((Buffer)buffer).position();
         int totalLength = finalPosition - initialPosition;
         int attributesLength = totalLength - 12;
         
         try
         {
-        	buffer.position(initialPosition);
+        	((Buffer)buffer).position(initialPosition);
         	packHeader(buffer, packet, attributesLength, sharedSecret);
-        	buffer.position(finalPosition);
+        	((Buffer)buffer).position(finalPosition);
         }
         catch(Exception e)
         {

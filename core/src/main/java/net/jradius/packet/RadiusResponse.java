@@ -21,6 +21,7 @@
 package net.jradius.packet;
 
 import java.nio.ByteBuffer;
+import java.nio.Buffer;
 import java.util.Arrays;
 
 import net.jradius.packet.attribute.AttributeList;
@@ -61,8 +62,8 @@ public abstract class RadiusResponse extends RadiusPacket
     	RadiusFormat.getInstance().packAttributeList(getAttributes(), buffer, true);
         byte[] hash = RadiusUtils.makeRFC2865ResponseAuthenticator(sharedSecret,
 		        (byte)(getCode() & 0xff), (byte)(getIdentifier() & 0xff), 
-		        (short)(buffer.position() + RADIUS_HEADER_LENGTH), 
-		        requestAuthenticator, buffer.array(), buffer.position());
+		        (short)(((Buffer)buffer).position() + RADIUS_HEADER_LENGTH),
+		        requestAuthenticator, buffer.array(), ((Buffer)buffer).position());
         return Arrays.equals(hash, getAuthenticator());
     }
 
@@ -72,7 +73,7 @@ public abstract class RadiusResponse extends RadiusPacket
     	RadiusFormat.getInstance().packAttributeList(getAttributes(), buffer, true);
 		setAuthenticator(RadiusUtils.makeRFC2865ResponseAuthenticator( sharedSecret,
 		        (byte)(getCode() & 0xff), (byte)(getIdentifier() & 0xff), 
-		        (short)(buffer.position() + RADIUS_HEADER_LENGTH), 
-		        requestAuthenticator, buffer.array(), buffer.position()));
+		        (short)(((Buffer)buffer).position() + RADIUS_HEADER_LENGTH),
+		        requestAuthenticator, buffer.array(), ((Buffer)buffer).position()));
     }
 }

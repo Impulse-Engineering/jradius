@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
+import java.nio.Buffer;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -138,7 +139,7 @@ public abstract class Format
         		continue;
         	}
         	
-        	int currentPosition = buffer.position();
+        	int currentPosition = ((Buffer)buffer).position();
         	
         	try
         	{
@@ -148,7 +149,7 @@ public abstract class Format
         	{
         		RadiusAttribute a = attrs.get(AttributeDictionary.CHARGEABLE_USER_IDENTITY);
         		RadiusLog.error("Truncating RADIUS packet " + (a == null ? "unknown" : a.toString())+" :: "+attr.toString(), null);
-        		buffer.position(currentPosition);
+        		((Buffer)buffer).position(currentPosition);
         		attr.setOverflow(true);
         	}
         }

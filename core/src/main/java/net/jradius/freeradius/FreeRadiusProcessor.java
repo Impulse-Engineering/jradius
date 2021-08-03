@@ -24,6 +24,7 @@ package net.jradius.freeradius;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
+import java.nio.Buffer;
 
 import net.jradius.exception.RadiusException;
 import net.jradius.handler.chain.JRCommand;
@@ -100,7 +101,7 @@ public class FreeRadiusProcessor extends RadiusProcessor
 
         ByteBuffer buffer = request.buffer_out;
         
-        buffer.clear();
+        ((Buffer)buffer).clear();
         
         RadiusFormat.putUnsignedInt(buffer, 0);
         RadiusFormat.putUnsignedByte(buffer, request.getReturnValue());
@@ -111,18 +112,18 @@ public class FreeRadiusProcessor extends RadiusProcessor
         	format.packPacket(rp[i], null, buffer, false);
         }
 
-        int pktsLength = buffer.position();
+        int pktsLength = ((Buffer)buffer).position();
         
         RadiusFormat.putUnsignedInt(buffer, 0);
         
         format.packAttributeList(request.getConfigItems(), buffer, false);
         
-        int cItemsLength = buffer.position();
+        int cItemsLength = ((Buffer)buffer).position();
         
         RadiusFormat.putUnsignedInt(buffer, pktsLength, cItemsLength - pktsLength - 4);
-        RadiusFormat.putUnsignedInt(buffer, 0, buffer.position() - 4);
+        RadiusFormat.putUnsignedInt(buffer, 0, ((Buffer)buffer).position() - 4);
 
-        out.write(buffer.array(), 0, buffer.position());
+        out.write(buffer.array(), 0, ((Buffer)buffer).position());
         out.flush();
     }
 

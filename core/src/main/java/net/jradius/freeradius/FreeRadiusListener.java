@@ -23,6 +23,7 @@ package net.jradius.freeradius;
 
 import java.io.InputStream;
 import java.nio.ByteBuffer;
+import java.nio.Buffer;
 
 import net.jradius.exception.RadiusException;
 import net.jradius.packet.PacketFactory;
@@ -83,7 +84,7 @@ public class FreeRadiusListener extends TCPListener
         	return null;
         }
         
-        buffer.clear();
+        ((Buffer)buffer).clear();
         byte[] payload = buffer.array();
         
         while (readOffset < totalLength)
@@ -93,7 +94,7 @@ public class FreeRadiusListener extends TCPListener
         	readOffset += result;
         }
         
-        buffer.limit(totalLength);
+        ((Buffer)buffer).limit(totalLength);
 
         long nameLength = RadiusFormat.getUnsignedInt(buffer);
 

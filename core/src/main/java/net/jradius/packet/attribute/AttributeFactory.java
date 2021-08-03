@@ -25,6 +25,7 @@ import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.Serializable;
 import java.nio.ByteBuffer;
+import java.nio.Buffer;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -523,8 +524,8 @@ public final class AttributeFactory
         
             if (valueLength > 0) 
             {
-            	attr.setValue(buffer.array(), buffer.position(), valueLength);
-            	buffer.position(buffer.position() + valueLength);
+            	attr.setValue(buffer.array(), ((Buffer)buffer).position(), valueLength);
+            	((Buffer)buffer).position(((Buffer)buffer).position() + valueLength);
             }
             else 
             {

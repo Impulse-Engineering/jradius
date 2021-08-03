@@ -25,6 +25,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.SocketException;
 import java.nio.ByteBuffer;
+import java.nio.Buffer;
 import java.nio.channels.DatagramChannel;
 
 import net.jradius.exception.RadiusException;
@@ -101,7 +102,7 @@ public class UDPClientTransport extends RadiusClientTransport
         ByteBuffer buffer = ByteBuffer.allocate(4096);
         format.packPacket(req, sharedSecret, buffer, true);
 
-        DatagramPacket request = new DatagramPacket(buffer.array(), buffer.position(), getRemoteInetAddress(), port);
+        DatagramPacket request = new DatagramPacket(buffer.array(), ((Buffer)buffer).position(), getRemoteInetAddress(), port);
         socket.send(request);
 
         if (statusListener != null)

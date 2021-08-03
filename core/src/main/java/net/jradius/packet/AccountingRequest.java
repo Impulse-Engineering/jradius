@@ -22,6 +22,7 @@
 package net.jradius.packet;
 
 import java.nio.ByteBuffer;
+import java.nio.Buffer;
 import java.util.Arrays;
 
 import net.jradius.client.RadiusClient;
@@ -125,7 +126,7 @@ public class AccountingRequest extends RadiusRequest
 
         byte[] newauth = RadiusUtils.makeRFC2866RequestAuthenticator(sharedSecret,
                 (byte)getCode(), (byte)getIdentifier(), 
-                buffer.position() + RADIUS_HEADER_LENGTH, 
+                ((Buffer)buffer).position() + RADIUS_HEADER_LENGTH, 
                 buffer.array(), 0, buffer.position());
 
         return Arrays.equals(newauth, this.authenticator);

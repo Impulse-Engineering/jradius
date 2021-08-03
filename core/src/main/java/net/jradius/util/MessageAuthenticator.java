@@ -5,6 +5,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.nio.Buffer;
 
 import net.jradius.packet.RadiusFormat;
 import net.jradius.packet.RadiusPacket;
@@ -22,7 +23,7 @@ public class MessageAuthenticator
         ByteBuffer buffer = ByteBuffer.allocate(4096);
         request.overwriteAttribute(AttributeFactory.newAttribute(AttributeDictionary.MESSAGE_AUTHENTICATOR, hash, request.isRecyclable()));
         format.packPacket(request, sharedSecret, buffer, true);
-        System.arraycopy(MD5.hmac_md5(buffer.array(), 0, buffer.position(), sharedSecret.getBytes()), 0, hash, 0, 16);
+        System.arraycopy(MD5.hmac_md5(buffer.array(), 0, ((Buffer)buffer).position(), sharedSecret.getBytes()), 0, hash, 0, 16);
 	}
     
     public static void generateResponseMessageAuthenticator(RadiusPacket request, RadiusPacket reply, String sharedSecret) throws IOException, InvalidKeyException, NoSuchAlgorithmException
@@ -34,7 +35,7 @@ public class MessageAuthenticator
         reply.setAuthenticator(requestAuth);
         reply.overwriteAttribute(AttributeFactory.newAttribute(AttributeDictionary.MESSAGE_AUTHENTICATOR, hash, reply.isRecyclable()));
         format.packPacket(reply, sharedSecret, buffer, true);
-        System.arraycopy(MD5.hmac_md5(buffer.array(), 0, buffer.position(), sharedSecret.getBytes()), 0, hash, 0, 16);
+        System.arraycopy(MD5.hmac_md5(buffer.array(), 0, ((Buffer)buffer).position(), sharedSecret.getBytes()), 0, hash, 0, 16);
         reply.setAuthenticator(replyAuth);
 	}
     
@@ -50,7 +51,7 @@ public class MessageAuthenticator
         attr.setValue(hash);
         
         format.packPacket(request, sharedSecret, buffer, true);
-        System.arraycopy(MD5.hmac_md5(buffer.array(), 0, buffer.position(), sharedSecret.getBytes()), 0, hash, 0, 16);
+        System.arraycopy(MD5.hmac_md5(buffer.array(), 0, ((Buffer)buffer).position(), sharedSecret.getBytes()), 0, hash, 0, 16);
 
         attr.setValue(pval);
         
@@ -73,7 +74,7 @@ public class MessageAuthenticator
         reply.setAuthenticator(requestAuth);
 
         format.packPacket(reply, sharedSecret, buffer, true);
-        System.arraycopy(MD5.hmac_md5(buffer.array(), 0, buffer.position(), sharedSecret.getBytes()), 0, hash, 0, 16);
+        System.arraycopy(MD5.hmac_md5(buffer.array(), 0, ((Buffer)buffer).position(), sharedSecret.getBytes()), 0, hash, 0, 16);
 
         reply.setAuthenticator(replyAuth);
         

@@ -23,6 +23,7 @@ package net.jradius.radsec;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
+import java.nio.Buffer;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 
@@ -95,10 +96,10 @@ public class RadSecProcessor extends RadiusProcessor
 		MessageAuthenticator.generateResponseMessageAuthenticator(req, res, sharedSecret);
 		res.generateAuthenticator(req.getAuthenticator(), sharedSecret);
 
-		buffer.clear();
+		((Buffer)buffer).clear();
 		format.packPacket(res, sharedSecret, buffer, true);
         
-        outputStream.write(buffer.array(), 0, buffer.position());
+        outputStream.write(buffer.array(), 0, ((Buffer)buffer).position());
         outputStream.flush();
     }
 
